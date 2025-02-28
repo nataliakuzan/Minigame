@@ -1,13 +1,22 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 public class PlayerController : MonoBehaviour
 {
     // Speed at which the player moves.
-    public float speed;
+    [SerializeField] private float speed;
+    // UI text component to display count of "PickUp" objects collected.
+    [SerializeField] private TextMeshProUGUI countText;
+    // UI object to display winning text.
+    [SerializeField] private GameObject winTextObject;
+    // Amount of "PickUp" objects in the scene.
+    [SerializeField] private int collectiblesCount;
     
     // Rigidbody of the player.
     private Rigidbody _rb;
+    // Variable to keep track of collected "PickUp" objects.
+    private int _count;
     // Movement along X and Y axes.
     private float _movementX;
     private float _movementY;
@@ -17,6 +26,15 @@ public class PlayerController : MonoBehaviour
     {
         // Get and store the Rigidbody component attached to the player.
         _rb = GetComponent<Rigidbody>();
+        
+        // Initialize count to zero.
+        _count = 0;
+        
+        // Update the count display.
+        SetCountText();
+        
+        // Initially set the win text to be inactive.
+        winTextObject.SetActive(false);
     }
     
     // This function is called when a move input is detected.
@@ -28,6 +46,20 @@ public class PlayerController : MonoBehaviour
         // Store the X and Y components of the movement.
         _movementX = movementVector.x;
         _movementY = movementVector.y;
+    }
+
+    // Function to update the displayed count of "PickUp" objects collected.
+    void SetCountText()
+    {
+        // Update the count text with the current count.
+        countText.text = "Score: " + _count.ToString();
+        
+        // Check if the count has reached or exceeded the win condition.
+        if (_count >= collectiblesCount)
+        {
+            // Display the win text.
+            winTextObject.SetActive(true);
+        }
     }
     
     // FixedUpdate is called once per fixed frame-rate frame.
@@ -46,6 +78,12 @@ public class PlayerController : MonoBehaviour
         {
             // Deactivate the collided object (making it disappear).
             other.gameObject.SetActive(false);
+            
+            // Increment the count of "PickUp" objects collected.
+            _count++;
+            
+            // Update the count display.
+            SetCountText();
         }
         
     }
