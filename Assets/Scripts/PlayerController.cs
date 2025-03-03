@@ -59,6 +59,11 @@ public class PlayerController : MonoBehaviour
         {
             // Display the win text.
             winTextObject.SetActive(true);
+            winTextObject.gameObject.GetComponent<TextMeshProUGUI>().text = "YOU WIN!";
+            winTextObject.gameObject.GetComponent<TextMeshProUGUI>().color = Color.green;
+            
+            // Destroy enemy
+            Destroy(GameObject.FindGameObjectWithTag("Enemy"));
         }
     }
     
@@ -71,6 +76,20 @@ public class PlayerController : MonoBehaviour
         _rb.AddForce(movement * speed);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            // Destroy the current object
+            Destroy(gameObject);
+            
+            // Set the text to "You lose!"
+            winTextObject.gameObject.SetActive(true);
+            winTextObject.gameObject.GetComponent<TextMeshProUGUI>().text = "YOU LOSE!";
+            winTextObject.gameObject.GetComponent<TextMeshProUGUI>().color = Color.red;
+            
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         // Check if the object the player collided with has the "PickUp" tag.
