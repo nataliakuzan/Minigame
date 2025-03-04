@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject winTextObject;
     // Amount of "PickUp" objects in the scene.
     [SerializeField] private int collectiblesCount;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private GameObject victoryPanel;
     
     // Rigidbody of the player.
     private Rigidbody _rb;
@@ -64,6 +66,8 @@ public class PlayerController : MonoBehaviour
             
             // Destroy enemy
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
+            
+            victoryPanel.SetActive(true);
         }
     }
     
@@ -87,7 +91,7 @@ public class PlayerController : MonoBehaviour
             winTextObject.gameObject.SetActive(true);
             winTextObject.gameObject.GetComponent<TextMeshProUGUI>().text = "YOU LOSE!";
             winTextObject.gameObject.GetComponent<TextMeshProUGUI>().color = Color.red;
-            
+            gameOverPanel.SetActive(true);
         }
     }
     private void OnTriggerEnter(Collider other)
